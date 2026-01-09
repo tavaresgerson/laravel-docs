@@ -1,0 +1,1 @@
+import{_ as a,c as l,o as e,a4 as i}from"./chunks/framework.Mm2aLcXd.js";const u=JSON.parse('{"title":"Laravel 11.x","description":"","frontmatter":{},"headers":[],"relativePath":"index.md","filePath":"index.md"}'),r={name:"index.md"},o=i("",2),t=[o];function s(h,d,c,n,m,f){return e(),l("div",null,t)}const p=a(r,[["render",s]]);export{u as __pageData,p as default};

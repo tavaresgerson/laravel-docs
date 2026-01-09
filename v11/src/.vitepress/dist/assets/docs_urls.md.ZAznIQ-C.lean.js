@@ -1,0 +1,1 @@
+import{_ as s,c as i,o as a,a4 as n}from"./chunks/framework.Mm2aLcXd.js";const c=JSON.parse('{"title":"Geração de URL","description":"","frontmatter":{},"headers":[],"relativePath":"docs/urls.md","filePath":"docs/urls.md"}'),e={name:"docs/urls.md"},t=n("",64),p=[t];function l(h,k,r,d,o,E){return a(),i("div",null,p)}const y=s(e,[["render",l]]);export{c as __pageData,y as default};
