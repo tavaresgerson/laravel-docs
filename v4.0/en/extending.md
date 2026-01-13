@@ -31,35 +31,41 @@ Each of these managers includes an `extend` method which may be used to easily i
 
 To extend the Laravel cache facility, we will use the `extend` method on the `CacheManager`, which is used to bind a custom driver resolver to the manager, and is common across all manager classes. For example, to register a new cache driver named "mongo", we would do the following:
 
-	Cache::extend('mongo', function($app)
-	{
-		// Return Illuminate\Cache\Repository instance...
-	});
+```
+Cache::extend('mongo', function($app)
+{
+	// Return Illuminate\Cache\Repository instance...
+});
+```
 
 The first argument passed to the `extend` method is the name of the driver. This will correspond to your `driver` option in the `app/config/cache.php` configuration file. The second argument is a Closure that should return an `Illuminate\Cache\Repository` instance. The Closure will be passed an `$app` instance, which is an instance of `Illuminate\Foundation\Application` and an IoC container.
 
 To create our custom cache driver, we first need to implement the `Illuminate\Cache\StoreInterface` contract. So, our MongoDB cache implementation would look something like this:
 
-	class MongoStore implements Illuminate\Cache\StoreInterface {
+```
+class MongoStore implements Illuminate\Cache\StoreInterface {
 
-		public function get($key) {}
-		public function put($key, $value, $minutes) {}
-		public function increment($key, $value = 1) {}
-		public function decrement($key, $value = 1) {}
-		public function forever($key, $value) {}
-		public function forget($key) {}
-		public function flush() {}
+	public function get($key) {}
+	public function put($key, $value, $minutes) {}
+	public function increment($key, $value = 1) {}
+	public function decrement($key, $value = 1) {}
+	public function forever($key, $value) {}
+	public function forget($key) {}
+	public function flush() {}
 
-	}
+}
+```
 
 We just need to implement each of these methods using a MongoDB connection. Once our implementation is complete, we can finish our custom driver registration:
 
-	use Illuminate\Cache\Repository;
+```
+use Illuminate\Cache\Repository;
 
-	Cache::extend('mongo', function($app)
-	{
-		return new Repository(new MongoStore);
-	});
+Cache::extend('mongo', function($app)
+{
+	return new Repository(new MongoStore);
+});
+```
 
 As you can see in the example above, you may use the base `Illuminate\Cache\Repository` when creating custom cache drivers. There is typically no need to create your own repository class.
 
@@ -72,23 +78,27 @@ If you're wondering where to put your custom cache driver code, consider making 
 
 Extending Laravel with a custom session driver is just as easy as extending the cache system. Again, we will use the `extend` method to register our custom code:
 
-	Session::extend('mongo', function($app)
-	{
-		// Return implementation of SessionHandlerInterface
-	});
+```
+Session::extend('mongo', function($app)
+{
+	// Return implementation of SessionHandlerInterface
+});
+```
 
 Note that our custom cache driver should implement the `SessionHandlerInterface`. This interface is included in the PHP 5.4+ core. If you are using PHP 5.3, the interface will be defined for you by Laravel so you have forward-compatibility. This interface contains just a few simple methods we need to implement. A stubbed MongoDB implementation would look something like this:
 
-	class MongoHandler implements SessionHandlerInterface {
+```
+class MongoHandler implements SessionHandlerInterface {
 
-		public function open($savePath, $sessionName) {}
-		public function close() {}
-		public function read($sessionId) {}
-		public function write($sessionId, $data) {}
-		public function destroy($sessionId) {}
-		public function gc($lifetime) {}
+	public function open($savePath, $sessionName) {}
+	public function close() {}
+	public function read($sessionId) {}
+	public function write($sessionId, $data) {}
+	public function destroy($sessionId) {}
+	public function gc($lifetime) {}
 
-	}	
+}	
+```
 
 Since these methods are not as readily understandable as the cache `StoreInterface`, let's quickly cover what each of the methods do:
 
@@ -101,10 +111,12 @@ Since these methods are not as readily understandable as the cache `StoreInterfa
 
 Once the `SessionHandlerInterface` has been implemented, we are ready to register it with the Session manager:
 
-	Session::extend('mongo', function($app)
-	{
-		return new MongoHandler;
-	});
+```
+Session::extend('mongo', function($app)
+{
+	return new MongoHandler;
+});
+```
 
 Once the session driver has been registered, we may use the `mongo` driver in our `app/config/session.php` configuration file.
 
@@ -115,22 +127,26 @@ Once the session driver has been registered, we may use the `mongo` driver in ou
 
 Authentication may be extended the same way as the cache and session facilities. Again, we will use the `extend` method we have become familiar with:
 
-	Auth::extend('riak', function($app)
-	{
-		// Return implementation of Illuminate\Auth\UserProviderInterface
-	});
+```
+Auth::extend('riak', function($app)
+{
+	// Return implementation of Illuminate\Auth\UserProviderInterface
+});
+```
 
 The `UserProviderInterface` implementations are only responsible for fetching a `UserInterface` implementation out of a persistent storage system, such as MySQL, Riak, etc. These two interfaces allow the Laravel authentication mechanisms to continue functioning regardless of how the user data is stored or what type of class is used to represent it.
 
 Let's take a look at the `UserProviderInterface`:
 
-	interface UserProviderInterface {
+```
+interface UserProviderInterface {
 
-		public function retrieveById($identifier);
-		public function retrieveByCredentials(array $credentials);
-		public function validateCredentials(UserInterface $user, array $credentials);
+	public function retrieveById($identifier);
+	public function retrieveByCredentials(array $credentials);
+	public function validateCredentials(UserInterface $user, array $credentials);
 
-	}
+}
+```
 
 The `retrieveById` function typically receives a numeric key representing the user, such as an auto-incrementing ID from a MySQL database. The `UserInterface` implementation matching the ID should be retrieved and returned by the method.
 
@@ -140,21 +156,25 @@ The `validateCredentials` method should compare the given `$user` with the `$cre
 
 Now that we have explored each of the methods on the `UserProviderInterface`, let's take a look at the `UserInterface`. Remember, the provider should return implementations of this interface from the `retrieveById` and `retrieveByCredentials` methods:
 
-	interface UserInterface {
+```
+interface UserInterface {
 
-		public function getAuthIdentifier();
-		public function getAuthPassword();
+	public function getAuthIdentifier();
+	public function getAuthPassword();
 
-	}
+}
+```
 
 This interface is simple. The `getAuthIdentifier` method should return the "primary key" of the user. In a MySQL back-end, again, this would be the auto-incrementing primary key. The `getAuthPassword` should return the user's hashed password. This interface allows the authentication system to work with any User class, regardless of what ORM or storage abstraction layer you are using. By default, Laravel includes a `User` class in the `app/models` directory which implements this interface, so you may consult this class for an implementation example.
 
 Finally, once we have implemented the `UserProviderInterface`, we are ready to register our extension with the `Auth` facade:
 
-	Auth::extend('riak', function($app)
-	{
-		return new RiakUserProvider($app['riak.connection']);
-	});
+```
+Auth::extend('riak', function($app)
+{
+	return new RiakUserProvider($app['riak.connection']);
+});
+```
 
 After you have registered the driver with the `extend` method, you switch to the new driver in your `app/config/auth.php` configuration file.
 
@@ -165,29 +185,33 @@ Almost every service provider included with the Laravel framework binds objects 
 
 For example, the `PaginationServiceProvider` binds a `paginator` key into the IoC container, which resolves into a `Illuminate\Pagination\Environment` instance. You can easily extend and override this class within your own application by overriding this IoC binding. For example, you could create a class that extend the base `Environment`:
 
-	namespace Snappy\Extensions\Pagination;
+```
+namespace Snappy\Extensions\Pagination;
 
-	class Environment extends \Illuminate\Pagination\Environment {
+class Environment extends \Illuminate\Pagination\Environment {
 
-		//
+	//
 
-	}
+}
+```
 
 Once you have created your class extension, you may create a new `SnappyPaginationProvider` service provider class which overrides the paginator in its `boot` method:
 
-	class SnappyPaginationProvider extends PaginationServiceProvider {
+```
+class SnappyPaginationProvider extends PaginationServiceProvider {
 
-		public function boot()
+	public function boot()
+	{
+		App::bind('paginator', function()
 		{
-			App::bind('paginator', function()
-			{
-				return new Snappy\Extensions\Pagination\Environment;
-			});
+			return new Snappy\Extensions\Pagination\Environment;
+		});
 
-			parent::boot();
-		}
-
+		parent::boot();
 	}
+
+}
+```
 
 Note that this class extends the `PaginationServiceProvider`, not the default `ServiceProvider` base class. Once you have extended the service provider, swap out the `PaginationServiceProvider` in your `app/config/app.php` configuration file with the name of your extended provider.
 
@@ -200,22 +224,28 @@ Because it is such a foundational piece of the framework and is instantiated ver
 
 First, extend the class like normal:
 
-	<?php namespace QuickBill\Extensions;
+```
+<?php namespace QuickBill\Extensions;
 
-	class Request extends \Illuminate\Http\Request {
+class Request extends \Illuminate\Http\Request {
 
-		// Custom, helpful methods here...
+	// Custom, helpful methods here...
 
-	}
+}
+```
 
 Once you have extended the class, open the `bootstrap/start.php` file. This file is one of the very first files to be included on each request to your application. Note that the first action performed is the creation of the Laravel `$app` instance:
 
-	$app = new \Illuminate\Foundation\Application;
+```
+$app = new \Illuminate\Foundation\Application;
+```
 
 When a new application instance is created, it will create a new `Illuminate\Http\Request` instance and bind it to the IoC container using the `request` key. So, we need a way to specify a custom class that should be used as the "default" request type, right? And, thankfully, the `requestClass` method on the application instance does just this! So, we can add this line at the very top of our `bootstrap/start.php` file:
 
-	use Illuminate\Foundation\Application;
+```
+use Illuminate\Foundation\Application;
 
-	Application::requestClass('QuickBill\Extensions\Request');
+Application::requestClass('QuickBill\Extensions\Request');
+```
 
 Once you have specified the custom request class, Laravel will use this class anytime it creates a `Request` instance, conveniently allowing you to always have an instance of your custom request class available, even in unit tests!

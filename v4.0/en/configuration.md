@@ -13,17 +13,23 @@ Sometimes you may need to access configuration values at run-time. You may do so
 
 **Accessing A Configuration Value**
 
-	Config::get('app.timezone');
+```
+Config::get('app.timezone');
+```
 
 You may also specify a default value to return if the configuration option does not exist:
 
-	$timezone = Config::get('app.timezone', 'UTC');
+```
+$timezone = Config::get('app.timezone', 'UTC');
+```
 
 Notice that "dot" style syntax may be used to access values in the various files. You may also set configuration values at run-time:
 
 **Setting A Configuration Value**
 
-	Config::set('database.default', 'sqlite');
+```
+Config::set('database.default', 'sqlite');
+```
 
 Configuration values that are set at run-time are only set for the current request, and will not be carried over to subsequent requests.
 
@@ -34,13 +40,15 @@ It is often helpful to have different configuration values based on the environm
 
 Simply create a folder within the `config` directory that matches your environment name, such as `local`. Next, create the configuration files you wish to override and specify the options for that environment. For example, to override the cache driver for the local environment, you would create a `cache.php` file in `app/config/local` with the following content:
 
-	<?php
+```
+<?php
 
-	return array(
+return array(
 
-		'driver' => 'file',
+	'driver' => 'file',
 
-	);
+);
+```
 
 > **Note:** Do not use 'testing' as an environment name. This is reserved for unit testing.
 
@@ -48,28 +56,34 @@ Notice that you do not have to specify _every_ option that is in the base config
 
 Next, we need to instruct the framework how to determine which environment it is running in. The default environment is always `production`. However, you may setup other environments within the `bootstrap/start.php` file at the root of your installation. In this file you will find an `$app->detectEnvironment` call. The array passed to this method is used to determine the current environment. You may add other environments and machine names to the array as needed.
 
-    <?php
+```
+<?php
 
-    $env = $app->detectEnvironment(array(
+$env = $app->detectEnvironment(array(
 
-        'local' => array('your-machine-name'),
+    'local' => array('your-machine-name'),
 
-    ));
+));
+```
 
 In this example, 'local' is the name of the environment and 'your-machine-name' is the hostname of your server. On Linux and Mac, you may determine your hostname using the `hostname` terminal command.
 
 You may also pass a `Closure` to the `detectEnvironment` method, allowing you to implement your own environment detection:
 
-	$env = $app->detectEnvironment(function()
-	{
-		return $_SERVER['MY_LARAVEL_ENV'];
-	});
+```
+$env = $app->detectEnvironment(function()
+{
+	return $_SERVER['MY_LARAVEL_ENV'];
+});
+```
 
 You may access the current application environment via the `environment` method:
 
 **Accessing The Current Application Environment**
 
-	$environment = App::environment();
+```
+$environment = App::environment();
+```
 
 <a name="maintenance-mode"></a>
 ## Maintenance Mode
@@ -78,15 +92,21 @@ When your application is in maintenance mode, a custom view will be displayed fo
 
 To enable maintenance mode, simply execute the `down` Artisan command:
 
-	php artisan down
+```
+php artisan down
+```
 
 To disable maintenance mode, use the `up` command:
 
-	php artisan up
+```
+php artisan up
+```
 
 To show a custom view when your application is in maintenance mode, you may add something like the following to your application's `app/start/global.php` file:
 
-	App::down(function()
-	{
-		return Response::view('maintenance', array(), 503);
-	});
+```
+App::down(function()
+{
+	return Response::view('maintenance', array(), 503);
+});
+```

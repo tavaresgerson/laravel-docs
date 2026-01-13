@@ -18,7 +18,9 @@ Laravel utilizes [Composer](http://getcomposer.org) to manage its dependencies. 
 
 You may install Laravel by issuing the Composer `create-project` command in your terminal:
 
-	composer create-project laravel/laravel --prefer-dist
+```
+composer create-project laravel/laravel --prefer-dist
+```
 
 ### Via Download
 
@@ -57,9 +59,11 @@ The framework ships with a `public/.htaccess` file that is used to allow URLs wi
 
 If the `.htaccess` file that ships with Laravel does not work with your Apache installation, try this one:
 
-	Options +FollowSymLinks
-	RewriteEngine On
+```
+Options +FollowSymLinks
+RewriteEngine On
 
-	RewriteCond %{REQUEST_FILENAME} !-d
-	RewriteCond %{REQUEST_FILENAME} !-f
-	RewriteRule ^ index.php [L]
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^ index.php [L]
+```

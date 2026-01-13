@@ -25,14 +25,16 @@ You may also do pre and post request processing by registering `before`, `after`
 
 **Registering Application Events**
 
-	App::before(function($request)
-	{
-		//
-	});
+```
+App::before(function($request)
+{
+	//
+});
 
-	App::after(function($request, $response)
-	{
-		//
-	});
+App::after(function($request, $response)
+{
+	//
+});
+```
 
 Listeners to these events will be run `before` and `after` each request to your application.

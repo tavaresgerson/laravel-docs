@@ -18,52 +18,70 @@ The cache configuration file also contains various other options, which are docu
 
 **Storing An Item In The Cache**
 
-	Cache::put('key', 'value', $minutes);
+```
+Cache::put('key', 'value', $minutes);
+```
 
 **Storing An Item In The Cache If It Doesn't Exist**
 
-	Cache::add('key', 'value', $minutes);
+```
+Cache::add('key', 'value', $minutes);
+```
 
 **Checking For Existence In Cache**
 
-	if (Cache::has('key'))
-	{
-		//
-	}
+```
+if (Cache::has('key'))
+{
+	//
+}
+```
 
 **Retrieving An Item From The Cache**
 
-	$value = Cache::get('key');
+```
+$value = Cache::get('key');
+```
 
 **Retrieving An Item Or Returning A Default Value**
 
-	$value = Cache::get('key', 'default');
+```
+$value = Cache::get('key', 'default');
 
-	$value = Cache::get('key', function() { return 'default'; });
+$value = Cache::get('key', function() { return 'default'; });
+```
 
 **Storing An Item In The Cache Permanently**
 
-	Cache::forever('key', 'value');
+```
+Cache::forever('key', 'value');
+```
 
 Sometimes you may wish to retrieve an item from the cache, but also store a default value if the requested item doesn't exist. You may do this using the `Cache::remember` method:
 
-	$value = Cache::remember('users', $minutes, function()
-	{
-		return DB::table('users')->get();
-	});
+```
+$value = Cache::remember('users', $minutes, function()
+{
+	return DB::table('users')->get();
+});
+```
 
 You may also combine the `remember` and `forever` methods:
 
-	$value = Cache::rememberForever('users', function()
-	{
-		return DB::table('users')->get();
-	});
+```
+$value = Cache::rememberForever('users', function()
+{
+	return DB::table('users')->get();
+});
+```
 
 Note that all items stored in the cache are serialized, so you are free to store any type of data.
 
 **Removing An Item From The Cache**
 
-	Cache::forget('key');
+```
+Cache::forget('key');
+```
 
 <a name="increments-and-decrements"></a>
 ## Increments & Decrements
@@ -72,15 +90,19 @@ All drivers except `file` and `database` support the `increment` and `decrement`
 
 **Incrementing A Value**
 
-	Cache::increment('key');
+```
+Cache::increment('key');
 
-	Cache::increment('key', $amount);
+Cache::increment('key', $amount);
+```
 
 **Decrementing A Value**
 
-	Cache::decrement('key');
+```
+Cache::decrement('key');
 
-	Cache::decrement('key', $amount);
+Cache::decrement('key', $amount);
+```
 
 <a name="cache-sections"></a>
 ## Cache Sections
@@ -91,28 +113,36 @@ Cache sections allow you to group related items in the cache, and then flush the
 
 **Accessing A Cache Section**
 
-	Cache::section('people')->put('John', $john, $minutes);
+```
+Cache::section('people')->put('John', $john, $minutes);
 
-	Cache::section('people')->put('Anne', $anne, $minutes);
+Cache::section('people')->put('Anne', $anne, $minutes);
+```
 
 You may also access cached items from the section, as well as use the other cache methods such as `increment` and `decrement`:
 
 **Accessing Items In A Cache Section**
 
-	$anne = Cache::section('people')->get('Anne');
+```
+$anne = Cache::section('people')->get('Anne');
+```
 
 Then you may flush all items in the section:
 
-	Cache::section('people')->flush();
+```
+Cache::section('people')->flush();
+```
 
 <a name="database-cache"></a>
 ## Database Cache
 
 When using the `database` cache driver, you will need to setup a table to contain the cache items. Below is an example `Schema` declaration for the table:
 
-	Schema::create('cache', function($table)
-	{
-		$table->string('key')->unique();
-		$table->text('value');
-		$table->integer('expiration');
-	});
+```
+Schema::create('cache', function($table)
+{
+	$table->string('key')->unique();
+	$table->text('value');
+	$table->integer('expiration');
+});
+```

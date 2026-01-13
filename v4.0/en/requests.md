@@ -13,32 +13,44 @@ You may access all user input with a few simple methods. You do not need to worr
 
 **Retrieving An Input Value**
 
-	$name = Input::get('name');
+```
+$name = Input::get('name');
+```
 
 **Retrieving A Default Value If The Input Value Is Absent**
 
-	$name = Input::get('name', 'Sally');
+```
+$name = Input::get('name', 'Sally');
+```
 
 **Determining If An Input Value Is Present**
 
-	if (Input::has('name'))
-	{
-		//
-	}
+```
+if (Input::has('name'))
+{
+	//
+}
+```
 
 **Getting All Input For The Request**
 
-	$input = Input::all();
+```
+$input = Input::all();
+```
 
 **Getting Only Some Of The Request Input**
 
-	$input = Input::only('username', 'password');
+```
+$input = Input::only('username', 'password');
 
-	$input = Input::except('credit_card');
+$input = Input::except('credit_card');
+```
 
 When working on forms with "array" inputs, you may use dot notation to access the arrays:
 
-	$input = Input::get('products.0.name');
+```
+$input = Input::get('products.0.name');
+```
 
 > **Note:** Some JavaScript libraries such as Backbone may send input to the application as JSON. You may access this data via `Input::get` like normal.
 
@@ -49,23 +61,31 @@ All cookies created by the Laravel framework are encrypted and signed with an au
 
 **Retrieving A Cookie Value**
 
-	$value = Cookie::get('name');
+```
+$value = Cookie::get('name');
+```
 
 **Attaching A New Cookie To A Response**
 
-	$response = Response::make('Hello World');
+```
+$response = Response::make('Hello World');
 
-	$response->withCookie(Cookie::make('name', 'value', $minutes));
+$response->withCookie(Cookie::make('name', 'value', $minutes));
+```
 
 **Queueing A Cookie For The Next Response**
 
 If you would like to set a cookie before a response has been created, use the `Cookie::queue()` method. The cookie will automatically be attached to the final response from your application.
 
-	Cookie::queue($name, $value, $minutes);
+```
+Cookie::queue($name, $value, $minutes);
+```
 
 **Creating A Cookie That Lasts Forever**
 
-	$cookie = Cookie::forever('name', 'value');
+```
+$cookie = Cookie::forever('name', 'value');
+```
 
 <a name="old-input"></a>
 ## Old Input
@@ -74,67 +94,91 @@ You may need to keep input from one request until the next request. For example,
 
 **Flashing Input To The Session**
 
-	Input::flash();
+```
+Input::flash();
+```
 
 **Flashing Only Some Input To The Session**
 
-	Input::flashOnly('username', 'email');
+```
+Input::flashOnly('username', 'email');
 
-	Input::flashExcept('password');
+Input::flashExcept('password');
+```
 
 Since you often will want to flash input in association with a redirect to the previous page, you may easily chain input flashing onto a redirect.
 
-	return Redirect::to('form')->withInput();
+```
+return Redirect::to('form')->withInput();
 
-	return Redirect::to('form')->withInput(Input::except('password'));
+return Redirect::to('form')->withInput(Input::except('password'));
+```
 
 > **Note:** You may flash other data across requests using the [Session](/docs/session) class.
 
 **Retrieving Old Data**
 
-	Input::old('username');
+```
+Input::old('username');
+```
 
 <a name="files"></a>
 ## Files
 
 **Retrieving An Uploaded File**
 
-	$file = Input::file('photo');
+```
+$file = Input::file('photo');
+```
 
 **Determining If A File Was Uploaded**
 
-	if (Input::hasFile('photo'))
-	{
-		//
-	}
+```
+if (Input::hasFile('photo'))
+{
+	//
+}
+```
 
 The object returned by the `file` method is an instance of the `Symfony\Component\HttpFoundation\File\UploadedFile` class, which extends the PHP `SplFileInfo` class and provides a variety of methods for interacting with the file.
 
 **Moving An Uploaded File**
 
-	Input::file('photo')->move($destinationPath);
+```
+Input::file('photo')->move($destinationPath);
 
-	Input::file('photo')->move($destinationPath, $fileName);
+Input::file('photo')->move($destinationPath, $fileName);
+```
 
 **Retrieving The Path To An Uploaded File**
 
-	$path = Input::file('photo')->getRealPath();
+```
+$path = Input::file('photo')->getRealPath();
+```
 
 **Retrieving The Original Name Of An Uploaded File**
 
-	$name = Input::file('photo')->getClientOriginalName();
+```
+$name = Input::file('photo')->getClientOriginalName();
+```
 
 **Retrieving The Extension Of An Uploaded File**
 
-	$extension = Input::file('photo')->getClientOriginalExtension();
+```
+$extension = Input::file('photo')->getClientOriginalExtension();
+```
 
 **Retrieving The Size Of An Uploaded File**
 
-	$size = Input::file('photo')->getSize();
+```
+$size = Input::file('photo')->getSize();
+```
 
 **Retrieving The MIME Type Of An Uploaded File**
 
-	$mime = Input::file('photo')->getMimeType();
+```
+$mime = Input::file('photo')->getMimeType();
+```
 
 <a name="request-information"></a>
 ## Request Information
@@ -143,48 +187,66 @@ The `Request` class provides many methods for examining the HTTP request for you
 
 **Retrieving The Request URI**
 
-	$uri = Request::path();
+```
+$uri = Request::path();
+```
 
 **Determining If The Request Path Matches A Pattern**
 
-	if (Request::is('admin/*'))
-	{
-		//
-	}
+```
+if (Request::is('admin/*'))
+{
+	//
+}
+```
 
 **Get The Request URL**
 
-	$url = Request::url();
+```
+$url = Request::url();
+```
 
 **Retrieve A Request URI Segment**
 
-	$segment = Request::segment(1);
+```
+$segment = Request::segment(1);
+```
 
 **Retrieving A Request Header**
 
-	$value = Request::header('Content-Type');
+```
+$value = Request::header('Content-Type');
+```
 
 **Retrieving Values From $_SERVER**
 
-	$value = Request::server('PATH_INFO');
+```
+$value = Request::server('PATH_INFO');
+```
 	
 **Determining If The Request Is Over HTTPS**
 
-	if (Request::secure())
-	{
-		//
-	}
+```
+if (Request::secure())
+{
+	//
+}
+```
 
 **Determine If The Request Is Using AJAX**
 
-	if (Request::ajax())
-	{
-		//
-	}
+```
+if (Request::ajax())
+{
+	//
+}
+```
 
 **Detect any type of JSON request**
 
-	if (Request::ajax() or Request::isJson() or Request::wantsJson())
-	{
-		//
-	}
+```
+if (Request::ajax() or Request::isJson() or Request::wantsJson())
+{
+	//
+}
+```

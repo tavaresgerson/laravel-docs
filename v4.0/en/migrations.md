@@ -18,32 +18,44 @@ To create a migration, you may use the `migrate:make` command on the Artisan CLI
 
 **Creating A Migration**
 
-	php artisan migrate:make create_users_table
+```
+php artisan migrate:make create_users_table
+```
 
 The migration will be placed in your `app/database/migrations` folder, and will contain a timestamp which allows the framework to determine the order of the migrations.
 
 You may also specify a `--path` option when creating the migration. The path should be relative to the root directory of your installation:
 
-	php artisan migrate:make foo --path=app/migrations
+```
+php artisan migrate:make foo --path=app/migrations
+```
 
 The `--table` and `--create` options may also be used to indicate the name of the table, and whether the migration will be creating a new table:
 
-	php artisan migrate:make create_users_table --table=users --create
+```
+php artisan migrate:make create_users_table --table=users --create
+```
 
 <a name="running-migrations"></a>
 ## Running Migrations
 
 **Running All Outstanding Migrations**
 
-	php artisan migrate
+```
+php artisan migrate
+```
 
 **Running All Outstanding Migrations For A Path**
 
-	php artisan migrate --path=app/foo/migrations
+```
+php artisan migrate --path=app/foo/migrations
+```
 
 **Running All Outstanding Migrations For A Package**
 
-	php artisan migrate --package=vendor/package
+```
+php artisan migrate --package=vendor/package
+```
 
 > **Note:** If you receive a "class not found" error when running migrations, try running the `composer dump-autoload` command.
 
@@ -52,17 +64,23 @@ The `--table` and `--create` options may also be used to indicate the name of th
 
 **Rollback The Last Migration Operation**
 
-	php artisan migrate:rollback
+```
+php artisan migrate:rollback
+```
 
 **Rollback all migrations**
 
-	php artisan migrate:reset
+```
+php artisan migrate:reset
+```
 
 **Rollback all migrations and run them all again**
 
-	php artisan migrate:refresh
+```
+php artisan migrate:refresh
 
-	php artisan migrate:refresh --seed
+php artisan migrate:refresh --seed
+```
 
 <a name="database-seeding"></a>
 ## Database Seeding
@@ -71,36 +89,44 @@ Laravel also includes a simple way to seed your database with test data using se
 
 **Example Database Seed Class**
 
-	class DatabaseSeeder extends Seeder {
+```
+class DatabaseSeeder extends Seeder {
 
-		public function run()
-		{
-			$this->call('UserTableSeeder');
+	public function run()
+	{
+		$this->call('UserTableSeeder');
 
-			$this->command->info('User table seeded!');
-		}
-
+		$this->command->info('User table seeded!');
 	}
 
-	class UserTableSeeder extends Seeder {
+}
 
-		public function run()
-		{
-			DB::table('users')->delete();
+class UserTableSeeder extends Seeder {
 
-			User::create(array('email' => 'foo@bar.com'));
-		}
+	public function run()
+	{
+		DB::table('users')->delete();
 
+		User::create(array('email' => 'foo@bar.com'));
 	}
+
+}
+```
 
 To seed your database, you may use the `db:seed` command on the Artisan CLI:
 
-	php artisan db:seed
+```
+php artisan db:seed
+```
 
 By default, the `db:seed` command runs the `DatabaseSeeder` class, which may be used to call other seed classes. However, you may use the `--class` option to specify a specific seeder class to run individually:
 
-	php artisan db:seed --class=UserTableSeeder
+```
+php artisan db:seed --class=UserTableSeeder
+```
 
 You may also seed your database using the `migrate:refresh` command, which will also rollback and re-run all of your migrations:
 
-	php artisan migrate:refresh --seed
+```
+php artisan migrate:refresh --seed
+```

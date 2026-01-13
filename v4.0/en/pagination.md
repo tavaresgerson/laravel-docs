@@ -18,25 +18,31 @@ There are several ways to paginate items. The simplest is by using the `paginate
 
 **Paginating Database Results**
 
-	$users = DB::table('users')->paginate(15);
+```
+$users = DB::table('users')->paginate(15);
+```
 
 You may also paginate [Eloquent](/docs/eloquent) models:
 
 **Paginating An Eloquent Model**
 
-	$allUsers = User::paginate(15);
+```
+$allUsers = User::paginate(15);
 
-	$someUsers = User::where('votes', '>', 100)->paginate(15);
+$someUsers = User::where('votes', '>', 100)->paginate(15);
+```
 
 The argument passed to the `paginate` method is the number of items you wish to display per page. Once you have retrieved the results, you may display them on your view, and create the pagination links using the `links` method:
 
-	<div class="container">
-		<?php foreach ($users as $user): ?>
-			<?php echo $user->name; ?>
-		<?php endforeach; ?>
-	</div>
+```
+<div class="container">
+	<?php foreach ($users as $user): ?>
+		<?php echo $user->name; ?>
+	<?php endforeach; ?>
+</div>
 
-	<?php echo $users->links(); ?>
+<?php echo $users->links(); ?>
+```
 
 This is all it takes to create a pagination system! Note that we did not have to inform the framework of the current page. Laravel will determine this for you automatically.
 
@@ -54,15 +60,19 @@ Sometimes you may wish to create a pagination instance manually, passing it an a
 
 **Creating A Paginator Manually**
 
-	$paginator = Paginator::make($items, $totalItems, $perPage);
+```
+$paginator = Paginator::make($items, $totalItems, $perPage);
+```
 
 **Customizing The Paginator URI**
 
 You may also customize the URI used by the paginator via the `setBaseUrl` method:
 
-	$users = User::paginate();
+```
+$users = User::paginate();
 
-	$users->setBaseUrl('custom/url');
+$users->setBaseUrl('custom/url');
+```
 
 The example above will create URLs like the following: http://example.com/custom/url?page=2
 
@@ -71,8 +81,12 @@ The example above will create URLs like the following: http://example.com/custom
 
 You can add to the query string of pagination links using the `appends` method on the Paginator:
 
-	<?php echo $users->appends(array('sort' => 'votes'))->links(); ?>
+```
+<?php echo $users->appends(array('sort' => 'votes'))->links(); ?>
+```
 
 This will generate URLs that look something like this:
 
-	http://example.com/something?page=2&sort=votes
+```
+http://example.com/something?page=2&sort=votes
+```
